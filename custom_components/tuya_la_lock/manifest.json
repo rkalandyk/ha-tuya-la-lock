@@ -1,7 +1,7 @@
 {
   "domain": "tuya_la_lock",
   "name": "Tuya LA-T01 Smart Lock",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "config_flow": true,
   "documentation": "https://github.com/rkalandyk/ha-tuya-la-lock",
   "requirements": [],

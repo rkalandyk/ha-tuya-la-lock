@@ -47,15 +47,21 @@ class TuyaLALockEntity(CoordinatorEntity[TuyaLockCoordinator], LockEntity):
 
     @property
     def is_locked(self) -> bool | None:
-        """True = zamknięty, False = otwarty (lock_motor_state == open)."""
+        """True = zamknięty, False = otwarty.
+        lock_motor_state: False = zamknięty, True = otwarty (bool z Tuya API).
+        """
         motor = self._status.get("lock_motor_state")
         if motor is None:
-            return None
-        return motor != "open"
+            return True  # domyślnie zamknięty (bezpieczny default)
+        if isinstance(motor, bool):
+            return not motor  # False = zamknięty → True
+        return motor != "open"  # dla ewentualnych wartości string
 
     @property
     def is_jammed(self) -> bool:
-        return bool(self._status.get("alarm_lock", False))
+        # alarm_lock to string z typem alarmu (np. "wrong_finger"), nie bool
+        # HA "jammed" = zamek mechanicznie zablokowany — nie mapujemy alarm_lock
+        return False
 
     @property
     def available(self) -> bool:
@@ -73,6 +79,7 @@ class TuyaLALockEntity(CoordinatorEntity[TuyaLockCoordinator], LockEntity):
             "arming_switch": s.get("arming_switch"),
             "beep_volume": s.get("beep_volume"),
             "alarm_type": s.get("alarm_type"),
+            "alarm_lock": s.get("alarm_lock"),
             "open_inside": s.get("open_inside"),
             "device_id": self._device_id,
         }
