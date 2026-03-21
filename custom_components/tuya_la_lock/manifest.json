@@ -3,7 +3,7 @@
   "name": "Tuya LA-T01 Smart Lock",
   "version": "1.0.0",
   "config_flow": true,
-  "documentation": "https://github.com/",
+  "documentation": "https://github.com/rkalandyk/ha-tuya-la-lock",
   "requirements": [],
   "dependencies": [],
   "codeowners": [],
