@@ -5,7 +5,7 @@ from homeassistant.core import HomeAssistant
 from .coordinator import TuyaLockCoordinator
 from .const import DOMAIN
 
-PLATFORMS = [Platform.LOCK]
+PLATFORMS = [Platform.LOCK, Platform.SENSOR]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
