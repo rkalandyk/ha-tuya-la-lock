@@ -119,7 +119,7 @@ class TuyaLockCoordinator(DataUpdateCoordinator):
         """Otwórz zamek przez Smart Lock API (ticket-based)."""
         ticket_r = await self.api(
             "POST",
-            f"/v1.0/devices/{device_id}/door-lock/password-free/ticket",
+            f"/v1.0/devices/{device_id}/door-lock/password-ticket",
             {},
         )
         if not ticket_r.get("success"):
