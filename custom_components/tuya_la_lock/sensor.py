@@ -107,24 +107,28 @@ class TuyaLockStatusSensor(TuyaLockBaseSensor):
     @property
     def native_value(self) -> str:
         s = self._status
-        if s.get("reverse_lock"):
-            return "zaryglowany od wewnątrz"
-        if s.get("manual_lock"):
-            return "zamknięty ręcznie"
         motor = s.get("lock_motor_state")
         if motor is True:
             return "otwarty"
+        # LA-T01: reverse_lock/manual_lock = ktoś użył zamka od wewnątrz
+        parts = []
+        if s.get("reverse_lock"):
+            parts.append("obrócony od wewnątrz")
+        if s.get("manual_lock"):
+            parts.append("przycisk wewnętrzny")
+        if parts:
+            return "zamknięty (" + ", ".join(parts) + ")"
         if motor is False:
             return "zamknięty"
         return "nieznany"
 
     @property
     def icon(self) -> str:
-        val = self.native_value
-        if val == "otwarty":
+        val = self.native_value or ""
+        if "otwarty" in val:
             return "mdi:lock-open"
-        if "zaryglowany" in (val or ""):
-            return "mdi:lock-plus"
+        if "wewnątrz" in val or "przycisk" in val:
+            return "mdi:lock-clock"
         return "mdi:lock"
 
     @property
